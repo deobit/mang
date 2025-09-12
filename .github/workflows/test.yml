@@ -27,6 +27,17 @@ jobs:
               with:
                 fetch-depth: 0
 
+            - name: Install MySQL client
+              run: |
+                apt-get update && apt-get install -y mysql-client
+        
+            - name: Wait for MySQL
+              run: |
+                until mysqladmin ping -h"mysql" -uroot -proot --silent; do
+                    echo "Waiting for MySQL..."
+                    sleep 2
+                done
+
             - name: nodejs version
               run: |
                 node -v
