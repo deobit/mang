@@ -30,7 +30,7 @@ jobs:
 
             - name: check docker
               run: |
-                /usr/bin/docker ps -a && /usr/bin/docker logs
+                /usr/bin/docker ps -a
 
             - name: nodejs version
               run: |
