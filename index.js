@@ -9,7 +9,12 @@ const connection = async () => {
         port: 3306
     });
 
-    const result = await conn.query('SELECT * FROM users');
+    const result = await conn.query(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INT PRIMARY KEY,
+            fulname VARCHAR(255) NOT NULL
+        );
+    `);
 }
 
 connection();
