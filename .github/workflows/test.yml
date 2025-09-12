@@ -29,8 +29,7 @@ jobs:
 
             - name: check docker
               run: |
-                alias docker='/usr/bin/docker' &&
-                docker ps -a && docker logs
+                /usr/bin/docker ps -a && /usr/bin/docker logs
 
             - name: nodejs version
               run: |
