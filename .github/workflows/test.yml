@@ -1,47 +1,49 @@
 name: test
 
 on: 
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node: [20]
-        
-        services:
-            mysql:
-                image: mysql
-                env:
-                    MYSQL_DATABASE: test_auth
-                    MYSQL_ROOT_PASSWORD: root
-                ports:
-                    - 3306:3306
-        
-        container: node:${{ matrix.node }}
-                    
-        steps:
-            - name: checkout repository
-              uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18]
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: test_auth
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+    
+    container: node:${{ matrix.node }}
+                
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-            - name: Install MySQL client
-              run: |
-                apt-get update && apt-get install -y mysql-client
-        
-            - name: Wait for MySQL
-              run: |
-                until mysqladmin ping -h"mysql" -uroot -proot --silent; do
-                    echo "Waiting for MySQL..."
-                    sleep 2
-                done
+      - name: Install MySQL client
+        run: |
+          apt-get update
+          apt-get install -y default-mysql-client
 
-            - name: nodejs version
-              run: |
-                node -v
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h"mysql" -uroot -proot --silent; do
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
 
-            - name: install package
-              run: |
-                npm i && node index
+      - name: nodejs version
+        run: node -v
+
+      - name: install package
+        run: npm install
+
+      - name: run app
+        run: node index.js
