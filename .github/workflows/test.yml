@@ -1,0 +1,36 @@
+name: test
+
+on: 
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node: [18]
+        
+        services:
+            mysql:
+                image: mysql
+                env:
+                    MYSQL_DATABASE: test_auth
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+        
+        container: node:${{ matrix.node }}
+                    
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+
+            - name: nodejs version
+              run: |
+                node -v
+
+            - name: install package
+              run: |
+                npm i && node index
