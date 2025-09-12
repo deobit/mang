@@ -28,7 +28,9 @@ jobs:
                 fetch-depth: 0
 
             - name: check docker
-              run: docker ps -a && docker logs
+              run: |
+                alias docker='/usr/bin/docker' &&
+                docker ps -a && docker logs
 
             - name: nodejs version
               run: |
