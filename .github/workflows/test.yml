@@ -15,10 +15,9 @@ jobs:
                 image: mysql
                 env:
                     MYSQL_DATABASE: test_auth
-                    MYSQL_ROOT_PASSWORD: thisissecret
+                    MYSQL_ROOT_PASSWORD: root
                 ports:
                     - 3306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         
         container: node:${{ matrix.node }}
                     
@@ -28,13 +27,9 @@ jobs:
               with:
                 fetch-depth: 0
 
-            - name: check docker
-              run: |
-                /usr/bin/docker ps -a
-
             - name: nodejs version
               run: |
-                node -v && cat index.js
+                node -v
 
             - name: install package
               run: |
