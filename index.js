@@ -5,7 +5,7 @@ const connection = async () => {
         user: 'root',
         password: 'root',
         database: 'test_auth',
-        host: '127.0.0.1',
+        host: 'mysql',
         port: 3306
     });
 
