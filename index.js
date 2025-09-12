@@ -9,7 +9,7 @@ const connection = async () => {
         port: 3306
     });
 
-    const result = await conn.query('SELECT * FROM users');
+    console.log('Connection Object', conn);
 }
 
 connection();
