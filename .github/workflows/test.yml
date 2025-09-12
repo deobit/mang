@@ -27,6 +27,9 @@ jobs:
               with:
                 fetch-depth: 0
 
+            - name: check docker
+              run: docker ps -a
+
             - name: nodejs version
               run: |
                 node -v && cat index.js
