@@ -49,11 +49,11 @@ jobs:
             
             - name: install postgres client
               run: |
-                sudo apt-get install postgresql-client -y
+                apt-get install postgresql-client -y
             
             - name: install mongodb shell
               run: |
-                sudo apt-get install mongodb-clients -y
+                apt-get install mongodb-clients -y
             
             - name: wait for database ready
               run: |
