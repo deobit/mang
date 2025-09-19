@@ -22,7 +22,7 @@ const connection = async () => {
         const result = await conn.query('SELECT * FROM users');
         console.log('Result', result);
     
-        console.log(await conn.query('SELECT * FROM information_schema.tables WHERE table_schema=\'test_auth\' AND table_name=\'users\''));
+        console.log(await conn.query('SELECT * ROM information_schema.tables WHERE table_schema=\'test_auth\' AND table_name=\'users\''));
     
         await conn.close();
     
