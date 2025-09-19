@@ -1,9 +1,6 @@
 name: test on node 18, 20, 22, 24
 
 on:
-    push: 
-        branches: 
-            - master
     workflow_dispatch: 
 
 jobs:
@@ -22,7 +19,7 @@ jobs:
                 ports:
                     - 3306:3306
             postgres:
-                image: pg
+                image: postgres
                 env:
                     POSTGRES_PASSWORD: password
                     POSTGRES_DB: test_db
