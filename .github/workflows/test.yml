@@ -1,49 +1,81 @@
-name: test
+name: test on node 18, 20, 22, 24
 
-on: 
-  workflow_dispatch:
+on:
+    push: 
+        branches: 
+            - master
+    workflow_dispatch: 
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [20, 22, 24]
-    
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: test_auth
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-    
-    container: node:${{ matrix.node }}
-                
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    mysql-test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node: [18, 20, 22, 24]
+        
+        services:
+            mysql:
+                image: mysql
+                env:
+                    MYSQL_ROOT_PASSWORD: password
+                    MYSQL_DATABASE: test_db
+                ports:
+                    - 3306:3306
+            postgres:
+                image: pg
+                env:
+                    POSTGRES_PASSWORD: password
+                    POSTGRES_DB: test_db
+                ports:
+                    - 5432:5432
+            mongo:
+                image: mongo
+                env:
+                    MONGO_INITDB_ROOT_USERNAME: mongo
+                    MONGO_INITDB_ROOT_PASSWORD: password
+                    MONGO_INITDB_DATABASE: mongo_db
+                ports:
+                    - 27017:27017
+        
+        container: node:${{ matrix.node }}
 
-      - name: Install MySQL client
-        run: |
-          apt-get update
-          apt-get install -y default-mysql-client
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
 
-      - name: Wait for MySQL
-        run: |
-          until mysqladmin ping -h"mysql" -uroot -proot --silent; do
-            echo "Waiting for MySQL..."
-            sleep 2
-          done
+            - name: install mysql client
+              run:
+                apt-get update
+                apt-get install -y default-mysql-client
+            
+            - name: install postgres client
+              run:
+                sudo apt-get install postgresql-client -y
+            
+            - name: install mongodb shell
+              run:
+                sudo apt-get install mongodb-clients -y
+            
+            - name: wait for database ready
+              run:
+                until mysqladmin ping -h"mysql" -uroot -upassword --silent; do
+                    echo "waiting for mysql"
+                    sleep 2
+                done
 
-      - name: nodejs version
-        run: node -v
+                until pg_isready -h "postgres" -p 5432 -U "postgres" > /dev/null 2>&1; do
+                    echo "waiting for postgre"
+                    sleep 2
+                done
 
-      - name: install package
-        run: npm install
-
-      - name: run app
-        run: node index.js
+                until mongo --host "mongo" -u "mongo" -p "password" --authenticationDatabase admin --eval "db.adminCommand('ping')" > /dev/null 2>&1; do
+                    echo "waiting for mongodb"
+                    sleep 2
+                done
+            
+            - name: finish
+              run: |
+                echo "success"
+              
