@@ -43,20 +43,20 @@ jobs:
                 fetch-depth: 0
 
             - name: install mysql client
-              run:
+              run: |
                 apt-get update
                 apt-get install -y default-mysql-client
             
             - name: install postgres client
-              run:
+              run: |
                 sudo apt-get install postgresql-client -y
             
             - name: install mongodb shell
-              run:
+              run: |
                 sudo apt-get install mongodb-clients -y
             
             - name: wait for database ready
-              run:
+              run: |
                 until mysqladmin ping -h"mysql" -uroot -upassword --silent; do
                     echo "waiting for mysql"
                     sleep 2
