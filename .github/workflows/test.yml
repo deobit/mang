@@ -72,7 +72,7 @@ jobs:
                     sleep 2
                 done
 
-                until mongo --host "mongo" -u "mongo" -p "password" --authenticationDatabase admin --eval "db.adminCommand('ping')" > /dev/null 2>&1; do
+                until mongo --host "mongo" -u "mongo" -p "password" --authenticationDatabase admin --eval "db.adminCommand('ping')"; do
                     echo "waiting for mongodb"
                     sleep 2
                 done
