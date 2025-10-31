@@ -1,7 +1,7 @@
 name: test on node 18, 20, 22, 24
 
 on:
-    push: 
+    pull_request: 
         branches: 
             - master
     workflow_dispatch: 
@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-22.04
         strategy:
             matrix:
-                node: [18]
+                node: [18, 20]
         
         services:
             mysql:
